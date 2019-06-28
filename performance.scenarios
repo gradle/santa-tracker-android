@@ -6,40 +6,40 @@ configurationTime {
 }
 
 cleanBuild {
-	tasks = [":santa-tracker:assembleDevelopmentDebug"]
+	tasks = [":santa-tracker:assembleDebug"]
 	cleanup-tasks = ["clean"]
 	warm-ups = 4
 }
 
 cachedCleanBuild {
-	tasks = [":santa-tracker:assembleDevelopmentDebug"]
+	tasks = [":santa-tracker:assembleDebug"]
 	cleanup-tasks = ["clean"]
 	gradle-args = ["--build-cache"]
 	warm-ups = 4
 }
 
 abiChange {
-	tasks = [":santa-tracker:assembleDevelopmentDebug"]
-	apply-abi-change-to = "common/src/main/java/com/google/android/apps/santatracker/games/PlayGamesFragment.java"
+	tasks = [":santa-tracker:assembleDebug"]
+	apply-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
 	warm-ups = 4
 }
 
 nonAbiChange {
-	tasks = [":santa-tracker:assembleDevelopmentDebug"]
-	apply-non-abi-change-to = "common/src/main/java/com/google/android/apps/santatracker/games/PlayGamesFragment.java"
+	tasks = [":santa-tracker:assembleDebug"]
+	apply-non-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
 	warm-ups = 4
 
 }
 
 resourceChange {
-	tasks = [":santa-tracker:assembleDevelopmentDebug"]
+	tasks = [":santa-tracker:assembleDebug"]
 	apply-android-resource-value-change-to = "santa-tracker/src/main/res/values/strings.xml"
 	warm-ups = 4
 }
 
 instantRun {
-  tasks = [":santa-tracker:assembleDevelopmentDebug"]
-  apply-non-abi-change-to = "common/src/main/java/com/google/android/apps/santatracker/games/PlayGamesFragment.java"
+  tasks = [":santa-tracker:assembleDebug"]
+  apply-non-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
   gradle-args = [
     "-Pandroid.injected.invoked.from.ide=true",
     "-Pandroid.injected.build.api=25",

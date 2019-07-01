@@ -708,7 +708,7 @@ public class StartupActivity extends AppCompatActivity implements
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (mResumed && hasFocus && !AccessibilityUtil.isTouchAccessiblityEnabled(this)) {
-            mAudioPlayer.playTrackExclusive(R.raw.village_music, true);
+//            mAudioPlayer.playTrackExclusive(R.raw.sleighbells, true);
         }
     }
 

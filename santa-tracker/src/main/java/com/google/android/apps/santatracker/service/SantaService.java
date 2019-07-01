@@ -186,14 +186,14 @@ public class SantaService extends Service implements APIProcessor.APICallback {
 
         // Initialise the ApiProcessor. If the client is "local" use the special debug processor for
         // a local file.
-        if (API_CLIENT.equals("local")) {
+       // if (API_CLIENT.equals("local")) {
             Toast.makeText(this, "Using Local API file!", Toast.LENGTH_SHORT).show();
             // For a local data file, remove all existing data first when the file is initialised
             mApiProcessor = new LocalApiProcessor(mPreferences, mDbHelper, streamDbHelper, this);
-        } else {
+       // } else {
             // Default processor that accesses the remote api via HTTPS.
-            mApiProcessor = new RemoteApiProcessor(mPreferences, mDbHelper, streamDbHelper, this);
-        }
+        //    mApiProcessor = new RemoteApiProcessor(mPreferences, mDbHelper, streamDbHelper, this);
+       // }
 
         // Check state of data - is it up to date?
         if (haveValidData()) {

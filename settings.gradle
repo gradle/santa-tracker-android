@@ -1,1 +1,1 @@
-include ':village', ':santa-tracker', ':wearable', ':common', ':dasherdancer', ':rocketsleigh', ':snowdown', ':doodles', ':presentquest'
+include ':village', ':santa-tracker', ':common', ':dasherdancer', ':rocketsleigh', ':doodles', ':presentquest'

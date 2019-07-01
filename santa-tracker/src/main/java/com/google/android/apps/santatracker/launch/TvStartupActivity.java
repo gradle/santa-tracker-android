@@ -372,7 +372,7 @@ public class TvStartupActivity extends FragmentActivity implements
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (mResumed && hasFocus && !AccessibilityUtil.isTouchAccessiblityEnabled(this)) {
-            mAudioPlayer.playTrackExclusive(R.raw.village_music, true);
+           // mAudioPlayer.playTrackExclusive(R.raw.village_music, true);
         }
     }
 

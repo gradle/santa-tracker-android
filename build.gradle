@@ -6,8 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'     // Tip 1 - b
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.6.0-alpha04'
     }
 }
 
@@ -29,7 +28,7 @@ subprojects {
 }
 
 ext {
-    minSdkVersion = 15
+    minSdkVersion = 24
     compileSdkVersion = 26
     targetSdkVersion = 26
 

@@ -18,7 +18,6 @@ android {
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
-
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
@@ -40,10 +39,13 @@ android {
         production {
         }
         development {
-            minSdkVersion 21        // Tip 2
+            minSdkVersion 24        // Tip 2
             resConfigs ("en", "xxhdpi")   // Tip 4
 
         }
+    }
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libvrtoolkit.so'
     }
 
     variantFilter { variant ->
@@ -52,9 +54,6 @@ android {
                 variant.getFlavors().get(0).name.equals("development")) {
             variant.setIgnore(true)
         }
-
-
-
     }
 
     boolean ciBuild = System.getenv("CI")
@@ -100,7 +99,7 @@ if (file('../internal/santa-tracker.gradle').exists()) {
 //   YY is the Path version number
 //   SSSS is information about the split (default to 0000)
 // Any new variations get added to the front
-/*import com.android.build.OutputFile;
+import com.android.build.OutputFile;
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         // Shift abi over by 8 digits
@@ -110,7 +109,7 @@ android.applicationVariants.all { variant ->
         // Merge all version codes
         output.versionCodeOverride = variant.mergedFlavor.versionCode + abiVersionCode
     }
-}*/
+}
 
 // Support library aar dependencies are loaded from the SDK
 dependencies {
@@ -118,10 +117,10 @@ dependencies {
     implementation project(':common')
     implementation project(':dasherdancer')
     implementation project(':rocketsleigh')
-    implementation project(':snowdown')
+//    implementation project(':snowdown')
     implementation project(':doodles')
     implementation project(':presentquest')
-    wearApp project(':wearable')
+//    wearApp project(':wearable')
 
     implementation files('../third_party/jbox2d/jbox2d-library-2.2.1.1.jar')
     implementation files('../third_party/youtube/YouTubeAndroidPlayerApi.jar')
@@ -168,4 +167,4 @@ dependencies {
     }
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'

@@ -15,8 +15,7 @@
   -->
 
 <resources>
-
-  <string name="track_santa" translation_description="Button text for to start tracking Santa on a Map">Track Santa!</string>
+  <string name="track_santa" translation_description="Button text for to start tracking Santa on a Map">Track Santa</string>
   <string name="track_santa_two_lines" translation_description="Button text to start tracking Santa on a Map">Track\nSanta</string>
   <string name="timer_start" translatable="false">1:00</string>
   <string name="santa_takes_off_in" translation_description="How much time until Christmas Eve, when Santa starts his journey to deliver presents">Santa takes off in</string>

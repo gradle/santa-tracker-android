@@ -17,7 +17,6 @@
 package com.google.android.apps.santatracker.games;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.apps.santatracker.R;
 import com.google.android.apps.santatracker.games.common.PlayGamesActivity;
@@ -51,9 +50,6 @@ public class MemoryActivity extends PlayGamesActivity {
 
         // [ANALYTICS SCREEN]: Memory
         AnalyticsManager.sendScreenView(R.string.analytics_screen_memory);
-        Log.d("Test", "test");
-        Log.d("Test", "test");
-
     }
 
     @Override

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.google.android.apps.santatracker.games;
 
 import android.app.Activity;
@@ -25,6 +26,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+
 import com.google.android.apps.santatracker.common.BuildConfig;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -34,10 +36,11 @@ import com.google.android.gms.games.Games;
 /**
  * Non-visible fragment to encapsulate Google Play Game Services logic.
  */
-public class PlayGamesFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class PlayGamesFragment extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = "PlayGamesFragment";
-
     private static final String FRAGMENT_TAG = "PlayGamesFragment_Tag";
 
     /** Key to store mIsResolving in SharedPreferences. **/
@@ -64,9 +67,37 @@ public class PlayGamesFragment extends Fragment implements GoogleApiClient.Conne
     /** Listener for sign-in events. **/
     private SignInListener mListener;
 
+    /**
+     * Get or create an instance of the Fragment attached to an Activity.
+     * @param activity FragmentActivity to host the Fragment.
+     * @param listener SignInListener to respond to changes in sign-in state.
+     * @return instance of PlayGamesFragment.
+     */
+    public static PlayGamesFragment getInstance(FragmentActivity activity,
+                                                SignInListener listener) {
+
+        FragmentManager fm = activity.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        PlayGamesFragment result = null;
+
+        Fragment fragment = fm.findFragmentByTag(FRAGMENT_TAG);
+        if (fragment == null) {
+            result = new PlayGamesFragment();
+            ft.add(result, FRAGMENT_TAG).disallowAddToBackStack().commit();
+        } else {
+            result = (PlayGamesFragment) fragment;
+        }
+
+        result.setListener(listener);
+        return result;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Restore state of in-progress sign-in in the case of rotation or other
         // Activity recreation.
         if (savedInstanceState != null) {
             mIsResolving = savedInstanceState.getBoolean(KEY_IS_RESOLVING, false);
@@ -89,20 +120,29 @@ public class PlayGamesFragment extends Fragment implements GoogleApiClient.Conne
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         // Only log debug messages when enabled
         mDebugLogEnabled = BuildConfig.DEBUG;
+
         // Api client for interacting with Google Play Games
-        mGamesApiClient = new GoogleApiClient.Builder(getActivity()).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Games.API, Games.GamesOptions.builder().build()).addScope(Games.SCOPE_GAMES).build();
+        mGamesApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Games.API, Games.GamesOptions.builder().build())
+                .addScope(Games.SCOPE_GAMES)
+                .build();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_GAMES) {
             debugLog("onActivityResult:RC_GAMES:" + resultCode + ":" + data);
+
             // If the error resolution was not successful we should not resolve further.
             if (resultCode != Activity.RESULT_OK) {
                 mShouldResolve = false;
             }
+
             mIsResolving = false;
             mGamesApiClient.connect();
         }
@@ -151,20 +191,21 @@ public class PlayGamesFragment extends Fragment implements GoogleApiClient.Conne
     private void showErrorDialog(ConnectionResult connectionResult) {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(getActivity());
+
         if (resultCode != ConnectionResult.SUCCESS) {
             if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(getActivity(), resultCode, RC_GAMES, new DialogInterface.OnCancelListener() {
-
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        mShouldResolve = false;
-                        mListener.onSignInFailed();
-                    }
-                }).show();
+                apiAvailability.getErrorDialog(getActivity(), resultCode, RC_GAMES,
+                        new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                mShouldResolve = false;
+                                mListener.onSignInFailed();
+                            }
+                        }).show();
             } else {
                 String errorString = apiAvailability.getErrorString(resultCode);
-                debugLog("Google Play Services Error:" + connectionResult + ":" + errorString);
-                ;
+                debugLog("Google Play Services Error:" + connectionResult + ":" + errorString);;
+
                 mShouldResolve = false;
                 mListener.onSignInFailed();
             }
@@ -188,6 +229,7 @@ public class PlayGamesFragment extends Fragment implements GoogleApiClient.Conne
         if (!mDebugLogEnabled) {
             return;
         }
+
         Log.d(TAG, message);
     }
 
@@ -195,24 +237,4 @@ public class PlayGamesFragment extends Fragment implements GoogleApiClient.Conne
         mListener = listener;
     }
 
-    /**
-     * Get or create an instance of the Fragment attached to an Activity.
-     * @param activity FragmentActivity to host the Fragment.
-     * @param listener SignInListener to respond to changes in sign-in state.
-     * @return instance of PlayGamesFragment.
-     */
-    public static PlayGamesFragment getInstance(FragmentActivity activity, SignInListener listener) {
-        FragmentManager fm = activity.getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        PlayGamesFragment result = null;
-        Fragment fragment = fm.findFragmentByTag(FRAGMENT_TAG);
-        if (fragment == null) {
-            result = new PlayGamesFragment();
-            ft.add(result, FRAGMENT_TAG).disallowAddToBackStack().commit();
-        } else {
-            result = (PlayGamesFragment) fragment;
-        }
-        result.setListener(listener);
-        return result;
-    }
 }

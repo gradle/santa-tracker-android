@@ -35,13 +35,13 @@ if (file('../internal/wearable.gradle').exists()) {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.appCompat
-    implementation rootProject.ext.supportV4
-    implementation rootProject.ext.supportWearable
-    implementation rootProject.ext.playServicesBasement
-    implementation rootProject.ext.playServicesBase
-    implementation rootProject.ext.playServicesWearable
-    implementation project(':common')
-    implementation project(':village')
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation rootProject.ext.appCompat
+//    implementation rootProject.ext.supportV4
+//    implementation rootProject.ext.supportWearable
+//    implementation rootProject.ext.playServicesBasement
+//    implementation rootProject.ext.playServicesBase
+//    implementation rootProject.ext.playServicesWearable
+//    implementation project(':common')
+//    implementation project(':village')
 }

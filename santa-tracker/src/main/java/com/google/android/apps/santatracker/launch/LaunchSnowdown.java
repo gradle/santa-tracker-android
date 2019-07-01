@@ -21,25 +21,25 @@ import android.view.View;
 
 import com.google.android.apps.santatracker.R;
 import com.google.android.apps.santatracker.games.SplashActivity;
-import com.google.fpl.pie_noon.FPLActivity;
-import com.google.fpl.pie_noon.FPLTvActivity;
+//import com.google.fpl.pie_noon.FPLActivity;
+//import com.google.fpl.pie_noon.FPLTvActivity;
 
 /**
  * Launches Snowdown (FKA Pie Noon).
  */
 public class LaunchSnowdown extends AbstractLaunch {
 
-    private final Class mLaunchActivityClass;
+//    private final Class mLaunchActivityClass;
 
     public LaunchSnowdown(SantaContext context, LauncherDataChangedCallback adapter) {
         super(context, adapter, R.string.snowdown, R.drawable.android_game_cards_snowdown);
 
 
-        if (isTV()) {
-            mLaunchActivityClass = FPLTvActivity.class;
-        } else {
-            mLaunchActivityClass = FPLActivity.class;
-        }
+//        if (isTV()) {
+//            mLaunchActivityClass = FPLTvActivity.class;
+//        } else {
+//            mLaunchActivityClass = FPLActivity.class;
+//        }
     }
 
     static public int getId() {
@@ -55,7 +55,7 @@ public class LaunchSnowdown extends AbstractLaunch {
                         R.drawable.android_game_cards_snowdown,
                         R.string.snowdown,
                         true /* landscape */,
-                        mLaunchActivityClass);
+                        null);
                 mContext.launchActivity(intent);
                 break;
             case STATE_DISABLED:

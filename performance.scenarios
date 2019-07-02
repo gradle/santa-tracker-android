@@ -1,53 +1,6 @@
 # Performance scenarios for santa-tracker-android project
+include required(url("https://raw.githubusercontent.com/gradle/santa-tracker-android/master/performance-base.conf"))
 
-configurationTime {
-	tasks = ["help"]
-	warm-ups = 10
-}
+file-to-change  = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
+resource-to-change  = "santa-tracker/src/main/res/values/strings.xml"
 
-cleanBuild {
-	tasks = [":santa-tracker:assembleDebug"]
-	cleanup-tasks = ["clean"]
-	warm-ups = 4
-}
-
-cachedCleanBuild {
-	tasks = [":santa-tracker:assembleDebug"]
-	cleanup-tasks = ["clean"]
-	gradle-args = ["--build-cache"]
-	warm-ups = 4
-}
-
-abiChange {
-	tasks = [":santa-tracker:assembleDebug"]
-	apply-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
-	warm-ups = 4
-}
-
-nonAbiChange {
-	tasks = [":santa-tracker:assembleDebug"]
-	apply-non-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
-	warm-ups = 4
-
-}
-
-resourceChange {
-	tasks = [":santa-tracker:assembleDebug"]
-	apply-android-resource-value-change-to = "santa-tracker/src/main/res/values/strings.xml"
-	warm-ups = 4
-}
-
-instantRun {
-  tasks = [":santa-tracker:assembleDebug"]
-  apply-non-abi-change-to = "village/src/main/java/com/google/android/apps/santatracker/village/SnowFlake.java"
-  gradle-args = [
-    "-Pandroid.injected.invoked.from.ide=true",
-    "-Pandroid.injected.build.api=25",
-    "-Pandroid.injected.build.density=420dpi",
-    "-Pandroid.injected.build.abi=x86",
-    "-Pandroid.injected.restrict.variant.name=developmentDebug",
-    "-Pandroid.injected.restrict.variant.project=:santa-tracker",
-    "-Pandroid.optional.compilation=INSTANT_DEV"
-  ]
-	warm-ups = 4
-}

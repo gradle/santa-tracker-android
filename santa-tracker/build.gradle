@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 ext.densityList = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi', 'xxxhdpi']
 ext.abiList = ['armeabi', 'armeabi-v7a', 'x86']
-ext.splitEnabled = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -56,16 +55,14 @@ android {
         }
     }
 
-    boolean ciBuild = System.getenv("CI")
-    splitEnabled = ciBuild                   // Tip 3
-    aaptOptions.cruncherEnabled = ciBuild    // Tip 5
+    aaptOptions.cruncherEnabled = false
 
 
 
 
    splits {
         abi {
-            enable splitEnabled
+            enable false
 
             // Include the three architectures that we support for snowdown
             reset()

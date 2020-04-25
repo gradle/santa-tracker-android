@@ -1,6 +1,7 @@
 buildscript {
 
     repositories {
+        maven { url 'https://repo.gradle.org/gradle/ext-snapshots-local/' }
         google()        // Tip 1 - a
         jcenter()
     }
@@ -12,6 +13,7 @@ buildscript {
 
 subprojects {
     repositories {
+        maven { url 'https://repo.gradle.org/gradle/ext-snapshots-local/' }
         google()
         jcenter()
     }

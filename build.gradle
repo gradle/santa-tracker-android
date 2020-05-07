@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:${providers.systemProperty("agpVersion").orNull ?: '3.6.0-rc01'}"
+        classpath "com.android.tools.build:gradle:${providers.systemProperty("agpVersion").forUseAtConfigurationTime().orNull ?: '3.6.0-rc01'}"
     }
 }
 

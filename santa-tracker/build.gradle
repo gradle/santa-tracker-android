@@ -1,3 +1,5 @@
+import com.android.build.api.attributes.BuildTypeAttr
+
 /*
  * Copyright 2019. Google LLC
  *
@@ -19,6 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'android-unit-test-conventions'
+apply plugin: 'test-report-aggregation'
 
 ext.abiList = ['armeabi', 'armeabi-v7a', 'x86']
 
@@ -92,7 +95,30 @@ android {
     }
 }
 
+reporting {
+    reports {
+        // create a report to aggregate results of `testDebugUnitTest` across projects
+        testDebugUnitTestAggregateReport(AggregateTestReport) {
+            testType = TestSuiteType.UNIT_TEST
+        }
+    }
+}
+
+// Add android-specific attributes to report's backing configuration.
+// Must be lazy since reports are created and configured lazily too.
+reporting.reports.withType(AggregateTestReport).configureEach { report ->
+    def conf = configurations.getByName("${report.name}Results")
+    conf.attributes { attributes ->
+        attributes.attribute(BuildTypeAttr.ATTRIBUTE, objects.named(BuildTypeAttr, 'debug'))
+    }
+}
+
 dependencies {
+    // Configuration `testReportAggregation` is created by the `test-report-aggregation` plugin.
+    // All project dependencies (including transitive) of this configuration are included for
+    // variant-aware resolution of test results.
+    testReportAggregation project
+
     // These are currently libraries, but could be separated out to features
     implementation project(':tracker')
 

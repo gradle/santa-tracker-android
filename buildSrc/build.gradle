@@ -1,0 +1,17 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+ext.kotlin = providers.systemProperty('kotlinVersion').forUseAtConfigurationTime().orNull ?: '1.4.32'
+ext.spotless = '5.10.1'
+ext.ktlint = '0.28.0'
+ext.googlejavaformat = '1.6'
+
+repositories {
+  google()
+  mavenCentral()
+}
+
+dependencies {
+    implementation "com.android.tools.build:gradle:${providers.systemProperty("agpVersion").forUseAtConfigurationTime().orNull ?: '4.1.3'}"
+}

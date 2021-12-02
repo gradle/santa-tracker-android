@@ -1,0 +1,38 @@
+import com.android.build.api.attributes.BuildTypeAttr
+import com.android.build.gradle.tasks.factory.AndroidUnitTest
+
+plugins.withId('com.android.application', createTestDataVariant(project))
+plugins.withId('com.android.library', createTestDataVariant(project))
+plugins.withId('com.android.dynamic-feature', createTestDataVariant(project))
+
+static Action<? super Plugin> createTestDataVariant(Project project) {
+    return {
+        project.tasks.withType(AndroidUnitTest) { test ->
+            def parts = test.name.split('(?=\\p{Upper})')
+
+            def testSuiteName = parts.first()
+            def testSuiteType = String.join('', parts).endsWith('UnitTest') ? TestSuiteType.UNIT_TEST : 'unknown'
+            def buildType = parts*.toLowerCase().contains('debug') ? 'debug' : 'release'
+
+            final Configuration variant = project.configurations.create "testResultsElementsFor${buildType.capitalize()}"
+            variant.visible = false
+            variant.canBeResolved = false
+            variant.canBeConsumed = true
+            variant.extendsFrom(project.configurations.getByName('implementation'), project.configurations.getByName('runtimeOnly'))
+
+            final ObjectFactory objects = project.objects
+            variant.attributes { attributes ->
+                attributes.attribute(BuildTypeAttr.ATTRIBUTE, objects.named(BuildTypeAttr, buildType))
+                attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.VERIFICATION))
+                attributes.attribute(TestSuiteName.TEST_SUITE_NAME_ATTRIBUTE, objects.named(TestSuiteName, testSuiteName))
+                attributes.attribute(TestSuiteTargetName.TEST_SUITE_TARGET_NAME_ATTRIBUTE, objects.named(TestSuiteTargetName, test.name))
+                attributes.attribute(TestSuiteType.TEST_SUITE_TYPE_ATTRIBUTE, objects.named(TestSuiteType, testSuiteType))
+                attributes.attribute(VerificationType.VERIFICATION_TYPE_ATTRIBUTE, objects.named(VerificationType, VerificationType.TEST_RESULTS))
+            }
+
+            variant.outgoing.artifact(test.binaryResultsDirectory) {artifact ->
+                artifact.type = ArtifactTypeDefinition.DIRECTORY_TYPE
+            }
+        }
+    }
+}

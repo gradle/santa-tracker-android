@@ -18,6 +18,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'android-unit-test-conventions'
 
 ext.abiList = ['armeabi', 'armeabi-v7a', 'x86']
 

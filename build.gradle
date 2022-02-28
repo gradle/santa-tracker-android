@@ -34,6 +34,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.gradle.android.cache-fix" version "2.4.6" apply false
+}
+
 ext {
     versionName = "5.3.1"
     versionCode = 53010005
@@ -142,7 +146,11 @@ ext {
     mergeAdapter = 'me.mvdw.recyclerviewmergeadapter:recyclerviewmergeadapter:2.1.0'
 }
 
+
 subprojects {
+    plugins.withType(com.android.build.gradle.api.AndroidBasePlugin) {
+        project.apply plugin: "org.gradle.android.cache-fix"
+    }
     apply plugin: "com.diffplug.spotless"
     spotless {
         java {

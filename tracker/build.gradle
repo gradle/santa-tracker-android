@@ -18,6 +18,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+room {
+    schemaLocationDir.set(file("$projectDir/schemas"))
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.tools
@@ -35,7 +39,6 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
 	        arguments = [
-                   "room.schemaLocation": "$projectDir/schemas".toString(),
                    "room.incremental": "true",
                    "dagger.gradle.incremental": "true"
                 ]

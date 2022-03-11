@@ -169,3 +169,102 @@ if (project.file('google-services.json').exists()) {
     apply plugin: 'com.google.gms.google-services'
 }
 // apply plugin: 'com.google.android.gms.oss-licenses-plugin' // This plugin has issues that would fail the build with Gradle 7.0+ (see bug 184258452)
+
+ArtifactView buildDocumentationView(Configuration graph, String docsType) {
+    return graph.getIncoming().artifactView(view -> {
+        view.setLenient(true);
+
+        // Uncomment me to view the new behavior
+        // view.withVariantReselection();
+
+        AttributeContainer attributes = view.getAttributes();
+        attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.class, Category.DOCUMENTATION));
+        attributes.attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.class, Bundling.EXTERNAL));
+        attributes.attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType.class, docsType));
+        attributes.attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.class, Usage.JAVA_RUNTIME));
+    });
+}
+
+ArtifactView buildAndroidDocumentationView(Configuration graph, String docsType) {
+    return graph.getIncoming().artifactView(view -> {
+        view.setLenient(true);
+
+        // Uncomment me to view the new behavior
+        // view.withVariantReselection();
+
+        AttributeContainer attributes = view.getAttributes();
+        attributes.attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.class, Category.DOCUMENTATION));
+        attributes.attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.class, Bundling.EXTERNAL));
+        attributes.attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType.class, docsType));
+        attributes.attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.class, Usage.JAVA_RUNTIME));
+    });
+}
+
+
+
+
+// Copied from demo project
+
+import javax.inject.Inject;
+import java.io.File;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public abstract class ResolveDocsTask extends org.gradle.api.DefaultTask {
+    @OutputDirectory
+    public abstract DirectoryProperty getDestinationDir();
+
+    @InputFiles
+    public abstract ConfigurableFileCollection getDocs();
+
+    @Inject
+    protected abstract FileSystemOperations getFileSystemOperations();
+
+    @TaskAction
+    public void resolveSources() {
+        // Fetch the documentation from the ArtifactView, causing resolution
+        Set<File> sourceFiles = getDocs().getFiles();
+
+        // Copy them to the output folder
+        getFileSystemOperations().copy(spec -> {
+            spec.from(sourceFiles);
+            spec.into(getDestinationDir());
+        });
+
+        // And print the result to the console
+        getLogger().lifecycle("Resolved the following files: {}", sourceFiles.stream().map(File::getName).sorted().collect(Collectors.toList()));
+    }
+}
+
+project.getTasks().register("resolveAndroidSource", ResolveDocsTask.class, task -> {
+    task.setGroup("documentation");
+    task.setDescription("Resolve source artifacts for all Android's runtime dependencies");
+
+    // Set task input and output conventions
+    ArtifactView docsView = buildAndroidDocumentationView(configurations.releaseRuntimeClasspath, DocsType.SOURCES);
+    task.getDocs().from(docsView.getFiles());
+    task.getDestinationDir().convention(project.getLayout().getBuildDirectory().dir("sources"));
+
+    // Always rerun this task
+    task.getOutputs().upToDateWhen(e -> false);
+});
+
+project.getTasks().register("resolveAndroidJavadoc", ResolveDocsTask.class, task -> {
+    task.setGroup("documentation");
+    task.setDescription("Resolve javadoc artifacts for all Android's runtime dependencies");
+
+    // Set task input and output conventions
+    ArtifactView docsView = buildAndroidDocumentationView(configurations.releaseRuntimeClasspath, DocsType.JAVADOC);
+    task.getDocs().from(docsView.getFiles());
+    task.getDestinationDir().convention(project.getLayout().getBuildDirectory().dir("javadoc"));
+
+    // Always rerun this task
+    task.getOutputs().upToDateWhen(e -> false);
+});
+
+project.getTasks().register("resolveAndroidDocumentation", Task.class, task -> {
+    task.setGroup("documentation");
+    task.setDescription("Resolve and download all documentation of Android's runtime dependencies");
+
+    task.dependsOn("resolveAndroidSource", "resolveAndroidJavadoc");
+});

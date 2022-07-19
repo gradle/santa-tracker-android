@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+pluginManagement {
+   repositories {
+       maven {
+           url 'https://plugins.grdev.net/m2'
+       }
+       gradlePluginPortal()
+   }
+}
 include ':santa-tracker',
         ':common',
         ':tracker',

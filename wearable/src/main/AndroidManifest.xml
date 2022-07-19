@@ -92,6 +92,7 @@
         <activity android:name="android.support.wearable.complications.ComplicationHelperActivity"/>
         <activity
             android:name=".SantaConfigurationActivity"
+            android:exported="true"
             android:label="@string/watch_face_santa">
             <intent-filter>
                 <action android:name="com.google.android.apps.santatracker.santawatchface.CONFIG_COMPLICATION"/>
@@ -102,6 +103,7 @@
 
         <activity
             android:name=".ElfConfigurationActivity"
+            android:exported="true"
             android:label="@string/watch_face_elf">
             <intent-filter>
                 <action android:name="com.google.android.apps.santatracker.elfwatchface.CONFIG_COMPLICATION"/>
@@ -112,6 +114,7 @@
 
         <service
             android:name=".ChristmasCountdownProviderService"
+            android:exported="true"
             android:label="@string/countdown_complication_label"
             android:icon="@drawable/ic_santaicon"
             android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">

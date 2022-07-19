@@ -200,6 +200,7 @@
         <!-- For receiver for FCM -->
         <service
             android:name="com.google.android.apps.santatracker.messaging.SantaMessagingService"
+            android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -175,4 +175,12 @@ subprojects {
         google()
         mavenCentral()
     }
+
+    pluginManager.withPlugin("java-base") {
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(8))
+            }
+        }
+    }
 }

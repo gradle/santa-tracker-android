@@ -38,14 +38,12 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.google.android.apps.santatracker.BuildConfig
 import com.google.android.apps.santatracker.R
+import com.google.android.apps.santatracker.databinding.ActivitySplashBinding
 import com.google.android.apps.santatracker.util.ImmersiveModeHelper
 import com.google.android.play.core.splitinstall.SplitInstallHelper
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
-import kotlinx.android.synthetic.main.activity_splash.progressbar
-import kotlinx.android.synthetic.main.activity_splash.splash_image
-import kotlinx.android.synthetic.main.activity_splash.splash_title
 
 /**
  * Splash screen for games. The splash screen rotates at runtime to match the orientation of the
@@ -58,6 +56,8 @@ class SplashActivity : AppCompatActivity() {
 
     private var activityClassName: String? = null
 
+    private lateinit var binding: ActivitySplashBinding
+
     private val splitInstallManager: SplitInstallManager by lazy(LazyThreadSafetyMode.NONE) {
         SplitInstallManagerFactory.create(this)
     }
@@ -69,16 +69,16 @@ class SplashActivity : AppCompatActivity() {
             }
 
             override fun onPending() {
-                progressbar.isVisible = true
-                progressbar.isIndeterminate = true
+                binding.progressbar.isVisible = true
+                binding.progressbar.isIndeterminate = true
             }
 
             override fun onDownloading(bytesDownloaded: Long, totalBytesToDownload: Long) {
                 if (bytesDownloaded >= (totalBytesToDownload * MIN_PROGRESS_DETERMINATE_PERC)) {
-                    progressbar.isIndeterminate = false
+                    binding.progressbar.isIndeterminate = false
                     // Use KB to minimize any overflow issues
-                    progressbar.progress = (bytesDownloaded / 1024).toInt()
-                    progressbar.max = (totalBytesToDownload / 1024).toInt()
+                    binding.progressbar.progress = (bytesDownloaded / 1024).toInt()
+                    binding.progressbar.max = (totalBytesToDownload / 1024).toInt()
                 }
             }
 
@@ -105,6 +105,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
 
         val gameIsLandscape = intent.getBooleanExtra(EXTRA_LANDSCAPE, false)
         activityClassName = intent.getStringExtra(EXTRA_CLASS_NAME)
@@ -119,23 +120,23 @@ class SplashActivity : AppCompatActivity() {
             return
         }
 
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
 
         // Immersive mode (to hide nav).
         ImmersiveModeHelper.setImmersiveSticky(window)
 
         // Set Image
         val imageTransitionName = intent.getStringExtra(EXTRA_IMAGE_TRANSITION_NAME)
-        splash_image.transitionName = imageTransitionName
+        binding.splashImage.transitionName = imageTransitionName
 
         val splashImageUrl = intent.getStringExtra(EXTRA_SPLASH_IMAGE_URL)
         if (splashImageUrl.isNullOrEmpty()) {
             val splashImageId = intent.getIntExtra(EXTRA_SPLASH_IMAGE_ID, -1)
             if (splashImageId != -1) {
-                Glide.with(splash_image.context).load(splashImageId).into(splash_image)
+                Glide.with(binding.splashImage.context).load(splashImageId).into(binding.splashImage)
             }
         } else {
-            Glide.with(splash_image.context).load(splashImageUrl).into(splash_image)
+            Glide.with(binding.splashImage.context).load(splashImageUrl).into(binding.splashImage)
         }
 
         val splashScreenColorId = intent.getIntExtra(EXTRA_SPLASH_SCREEN_COLOR_ID, -1)
@@ -144,7 +145,7 @@ class SplashActivity : AppCompatActivity() {
             mainView.setBackgroundColor(ContextCompat.getColor(this, splashScreenColorId))
         }
 
-        progressbar.apply {
+        binding.progressbar.apply {
             progressTintList = ContextCompat.getColorStateList(
                     this@SplashActivity, R.color.SantaWhite)
             indeterminateTintList = ContextCompat.getColorStateList(
@@ -153,7 +154,7 @@ class SplashActivity : AppCompatActivity() {
 
         // Set Title
         title = getString(intent.getIntExtra(EXTRA_SPLASH_TITLE_ID, -1))
-        splash_title.text = title
+        binding.splashTitle.text = title
 
         if (intent.hasExtra(EXTRA_DYNAMIC_FEATURE_NAME_ID)) {
             tryLaunchOrInstallModule(SHOW_FAKE_FEATURE_MODULE_DOWNLOAD)
@@ -192,8 +193,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startModuleInstall() {
-        progressbar.isVisible = true
-        progressbar.isIndeterminate = true
+        binding.progressbar.isVisible = true
+        binding.progressbar.isIndeterminate = true
 
         // The split isn't installed so lets start the split install request
         installStateListener.register(splitInstallManager)

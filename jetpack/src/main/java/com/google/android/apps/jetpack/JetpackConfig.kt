@@ -19,10 +19,10 @@ package com.google.android.apps.jetpack
 object JetpackConfig {
 
     // background music resource id
-    const val BGM_RES_ID = com.google.android.apps.santatracker.R.raw.santatracker_musicloop
+    val BGM_RES_ID = com.google.android.apps.santatracker.R.raw.santatracker_musicloop
 
     // leaderboard
-    const val LEADERBOARD = R.string.leaderboard_jetpack_high_scores
+    val LEADERBOARD = R.string.leaderboard_jetpack_high_scores
 
     // player settings
     object Player {

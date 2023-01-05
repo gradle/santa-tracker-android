@@ -437,10 +437,8 @@ public class TvStartupActivity extends FragmentActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.launch_button:
-                launchTracker();
-                break;
+        if (v.getId() == R.id.launch_button) {
+            launchTracker();
         }
     }
 

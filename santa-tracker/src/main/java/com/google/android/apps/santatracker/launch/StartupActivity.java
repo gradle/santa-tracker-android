@@ -796,6 +796,7 @@ public class StartupActivity extends AppCompatActivity
 
             SantaLog.d(TAG, "launched from notification");
         }
+        super.onNewIntent(intent);
     }
 
     @Override
@@ -1047,57 +1048,57 @@ public class StartupActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.legal_privacy:
-                launchWebUrl(getString(R.string.url_privacy));
-                return true;
-            case R.id.legal_tos:
-                launchWebUrl(getString(R.string.url_tos));
-                return true;
-            case R.id.legal_os:
-                OssLicensesMenuActivity.setActivityTitle(getString(R.string.open_source_licenses));
-                startActivity(new Intent(this, OssLicensesMenuActivity.class));
-                return true;
-            case R.id.legal_notice:
-                launchWebUrl(getString(R.string.url_legal));
-                return true;
-            case R.id.menu_app_invite:
-                mInvitesFragment.sendGenericInvite();
-                return true;
-            case R.id.open_help:
-                launchWebUrl(getString(R.string.url_help));
-                return true;
-            case R.id.github_santa:
-                launchWebUrl(getString(R.string.url_github_santa));
-                return true;
-            case R.id.sign_out:
-                Games.signOut(mGamesFragment.getGamesApiClient());
-                updateSignInState(false);
-                return true;
-            case R.id.sync_config:
-                mConfig.syncConfigAsync(
-                        new Config.ParamChangedCallback() {
-                            @Override
-                            public void onChanged(List<String> changedKeys) {
-                                mVillageViewModel.refresh();
-                            }
-                        });
-                return true;
-            case R.id.notification_takeoff:
-                SantaNotificationBuilder.createSantaNotification(
-                        this, R.string.notification_takeoff);
-                return true;
-            case R.id.set_date:
-                showDatePicker();
-                return true;
-            case R.id.sync_stickers:
-                AppIndexingUpdateServiceKt.enqueueRefreshAppIndex(this);
-                return true;
-            case R.id.mute_button:
-                mPreferences.toggleMuted();
-                onMuteChanged(mPreferences.isMuted());
-                invalidateOptionsMenu();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.legal_privacy) {
+            launchWebUrl(getString(R.string.url_privacy));
+            return true;
+        } else if (itemId == R.id.legal_tos) {
+            launchWebUrl(getString(R.string.url_tos));
+            return true;
+        } else if (itemId == R.id.legal_os) {
+            OssLicensesMenuActivity.setActivityTitle(getString(R.string.open_source_licenses));
+            startActivity(new Intent(this, OssLicensesMenuActivity.class));
+            return true;
+        } else if (itemId == R.id.legal_notice) {
+            launchWebUrl(getString(R.string.url_legal));
+            return true;
+        } else if (itemId == R.id.menu_app_invite) {
+            mInvitesFragment.sendGenericInvite();
+            return true;
+        } else if (itemId == R.id.open_help) {
+            launchWebUrl(getString(R.string.url_help));
+            return true;
+        } else if (itemId == R.id.github_santa) {
+            launchWebUrl(getString(R.string.url_github_santa));
+            return true;
+        } else if (itemId == R.id.sign_out) {
+            Games.signOut(mGamesFragment.getGamesApiClient());
+            updateSignInState(false);
+            return true;
+        } else if (itemId == R.id.sync_config) {
+            mConfig.syncConfigAsync(
+                    new Config.ParamChangedCallback() {
+                        @Override
+                        public void onChanged(List<String> changedKeys) {
+                            mVillageViewModel.refresh();
+                        }
+                    });
+            return true;
+        } else if (itemId == R.id.notification_takeoff) {
+            SantaNotificationBuilder.createSantaNotification(
+                    this, R.string.notification_takeoff);
+            return true;
+        } else if (itemId == R.id.set_date) {
+            showDatePicker();
+            return true;
+        } else if (itemId == R.id.sync_stickers) {
+            AppIndexingUpdateServiceKt.enqueueRefreshAppIndex(this);
+            return true;
+        } else if (itemId == R.id.mute_button) {
+            mPreferences.toggleMuted();
+            onMuteChanged(mPreferences.isMuted());
+            invalidateOptionsMenu();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1313,20 +1314,16 @@ public class StartupActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.launch_button:
-                launchTracker();
-                break;
-            case R.id.santa_waving:
-                MeasurementManager.recordVillageSantaClick(mMeasurement);
-                animateSanta();
-                break;
-            case R.id.fab_achievement:
-                showAchievements();
-                break;
-            case R.id.fab_leaderboard:
-                showLeaderboards();
-                break;
+        int id = v.getId();
+        if (id == R.id.launch_button) {
+            launchTracker();
+        } else if (id == R.id.santa_waving) {
+            MeasurementManager.recordVillageSantaClick(mMeasurement);
+            animateSanta();
+        } else if (id == R.id.fab_achievement) {
+            showAchievements();
+        } else if (id == R.id.fab_leaderboard) {
+            showLeaderboards();
         }
     }
 

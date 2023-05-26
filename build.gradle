@@ -65,7 +65,7 @@ ext {
     archLifecycleExtentions = "androidx.lifecycle:lifecycle-extensions:$archLifecycle"
     archLifecycleCompiler = "androidx.lifecycle:lifecycle-compiler:$archLifecycle"
 
-    archRoom = "2.4.3"
+    archRoom = "2.6.0-alpha02"
     archRoomRuntime = "androidx.room:room-runtime:$archRoom"
     archRoomCompiler = "androidx.room:room-compiler:$archRoom"
     archRoomTesting = "androidx.room:room-testing:$archRoom"

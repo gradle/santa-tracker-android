@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.google.android.apps.santatracker.tracker.api
 
 class LocaleMapper {
@@ -33,7 +32,7 @@ class LocaleMapper {
         if (locale == "zh-Hans-CN") {
             return "zh-CN"
         }
-        val lowerCase = locale.toLowerCase()
+        val lowerCase = locale.lowercase()
         if (lowerCase in SERVER_LANGUAGES) {
             return lowerCase
         }

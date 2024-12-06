@@ -269,7 +269,7 @@ class AllCaps(context: Context) : TransformationMethod {
     }
 
     override fun getTransformation(source: CharSequence?, view: View?): CharSequence? {
-        return source?.toString()?.toUpperCase(locale)
+        return source?.toString()?.uppercase(locale)
     }
 
     override fun onFocusChanged(
